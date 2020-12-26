@@ -8,8 +8,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.cache.Cache;
-import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
@@ -23,14 +21,10 @@ public class CacheEnabledBookService implements BookService {
     private static final String CACHE_NAME = "books";
     private static final Logger LOGGER = LoggerFactory.getLogger(CacheEnabledBookService.class);
     private BookService proxyBookService;
-    private Cache cache;
 
     @Autowired
-    public CacheEnabledBookService(
-            @Qualifier("bookServiceImpl") BookService proxyBookService,
-            CacheManager cacheManager) {
+    public CacheEnabledBookService(@Qualifier("bookServiceImpl") BookService proxyBookService) {
         this.proxyBookService = proxyBookService;
-        this.cache = cacheManager.getCache(CACHE_NAME);
     }
 
     public void setProxyBookService(BookService proxyBookService) {
@@ -66,14 +60,8 @@ public class CacheEnabledBookService implements BookService {
         return proxyBookService.deleteBook(isbn);
     }
 
+    @CacheEvict(cacheNames = CACHE_NAME, allEntries = true)
     public void invalidateCacheEntries() {
-        LOGGER.info("attempting to clear all cache entries");
-        boolean allInvalidated = cache.invalidate();
-        if(allInvalidated) {
-            LOGGER.info("all cache entries cleared");
-        } else {
-            LOGGER.warn("all cache entries not cleared");
-        }
-
+        LOGGER.info("clearing all cache entries");
     }
 }
