@@ -7,7 +7,7 @@ import com.github.mitrakumarsujan.springcachedemo.model.BookBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static com.github.mitrakumarsujan.springcachedemo.BookUtils.isBookEqual;
+import static com.github.mitrakumarsujan.springcachedemo.utils.BookUtils.isBookEqual;
 import static org.junit.jupiter.api.Assertions.*;
 
 abstract class BookServiceUnitTest {
@@ -17,11 +17,11 @@ abstract class BookServiceUnitTest {
     /**
      * a valid isbn which can in inserted
      */
-    protected String validISBN = "valid";
+    protected String validIsbn = "valid";
     /**
      * isbn which is either present or not present
      */
-    protected String invalidISBN = "invalid";
+    protected String invalidIsbn = "invalid";
 
     /**
      * book already present in db
@@ -37,7 +37,7 @@ abstract class BookServiceUnitTest {
     @Test
     protected void testAddValidBook() {
         Book book = getRandomBookBuilder()
-                .withIsbn(validISBN)
+                .withIsbn(validIsbn)
                 .build();
 
         Book savedBook = serviceUnderTest.addBook(book);
@@ -51,7 +51,7 @@ abstract class BookServiceUnitTest {
     @Test
     protected void testAddInvalidBook() {
         Book invalidBook = getRandomBookBuilder()
-                .withIsbn(invalidISBN)
+                .withIsbn(invalidIsbn)
                 .build();
         assertThrows(BookAlreadyExistsException.class, () -> serviceUnderTest.addBook(invalidBook));
     }
@@ -66,7 +66,7 @@ abstract class BookServiceUnitTest {
 
     @Test
     protected void testGetInvalidBook() {
-        assertThrows(BookNotFoundException.class, () -> serviceUnderTest.getBook(invalidISBN));
+        assertThrows(BookNotFoundException.class, () -> serviceUnderTest.getBook(invalidIsbn));
     }
 
     @Test
@@ -85,7 +85,7 @@ abstract class BookServiceUnitTest {
     @Test
     protected void testUpdateInvalidBook() {
         Book bookToUpdate = getRandomBookBuilder()
-                .withIsbn(invalidISBN)
+                .withIsbn(invalidIsbn)
                 .build();
         assertThrows(BookNotFoundException.class, () ->
                 serviceUnderTest.updateBook(bookToUpdate));
@@ -103,7 +103,7 @@ abstract class BookServiceUnitTest {
     @Test
     protected void testDeleteInvalidBook() {
         assertThrows(BookNotFoundException.class, () ->
-                serviceUnderTest.deleteBook(invalidISBN));
+                serviceUnderTest.deleteBook(invalidIsbn));
     }
 
     /**

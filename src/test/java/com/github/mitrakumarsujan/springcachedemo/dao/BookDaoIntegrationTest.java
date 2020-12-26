@@ -1,6 +1,6 @@
 package com.github.mitrakumarsujan.springcachedemo.dao;
 
-import com.github.mitrakumarsujan.springcachedemo.BookUtils;
+import com.github.mitrakumarsujan.springcachedemo.utils.BookUtils;
 import com.github.mitrakumarsujan.springcachedemo.model.Book;
 import com.github.mitrakumarsujan.springcachedemo.model.BookBuilder;
 import org.junit.jupiter.api.AfterEach;

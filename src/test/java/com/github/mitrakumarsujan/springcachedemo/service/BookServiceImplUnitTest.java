@@ -41,11 +41,11 @@ public class BookServiceImplUnitTest extends BookServiceUnitTest {
                 argThat(
                         argument -> argument
                                 .getIsbn()
-                                .equals(super.validISBN))))
+                                .equals(super.validIsbn))))
                 .thenReturn(true)
                 .thenThrow(BookAlreadyExistsException.class);
         BookImpl book = new BookImpl();
-        book.setISBN(super.validISBN);
+        book.setISBN(super.validIsbn);
         super.testAddValidBook();
     }
 
@@ -54,7 +54,7 @@ public class BookServiceImplUnitTest extends BookServiceUnitTest {
     protected void testAddInvalidBook() {
         doThrow(BookAlreadyExistsException.class)
                 .when(bookDao)
-                .saveBook(argThat(argument -> argument.getIsbn().equals(super.invalidISBN)));
+                .saveBook(argThat(argument -> argument.getIsbn().equals(super.invalidIsbn)));
         super.testAddInvalidBook();
     }
 
@@ -76,7 +76,7 @@ public class BookServiceImplUnitTest extends BookServiceUnitTest {
     @Test
     protected void testGetInvalidBook() {
         doReturn(Optional.empty())
-                .when(bookDao).getBookByIsbn(super.invalidISBN);
+                .when(bookDao).getBookByIsbn(super.invalidIsbn);
         super.testGetInvalidBook();
     }
 
@@ -95,7 +95,7 @@ public class BookServiceImplUnitTest extends BookServiceUnitTest {
     protected void testUpdateInvalidBook() {
         doThrow(BookNotFoundException.class)
                 .when(bookDao)
-                .deleteBookByIsbn(eq(invalidISBN));
+                .deleteBookByIsbn(eq(invalidIsbn));
         super.testUpdateInvalidBook();
     }
 
@@ -113,7 +113,7 @@ public class BookServiceImplUnitTest extends BookServiceUnitTest {
     protected void testDeleteInvalidBook() {
         doReturn(null)
                 .when(bookDao)
-                .deleteBookByIsbn(eq(invalidISBN));
+                .deleteBookByIsbn(eq(invalidIsbn));
         super.testDeleteInvalidBook();
     }
 }
