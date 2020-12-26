@@ -22,7 +22,7 @@ public class BookImpl implements Book {
     }
 
     @Override
-    public String getISBN() {
+    public String getIsbn() {
         return ISBN;
     }
 

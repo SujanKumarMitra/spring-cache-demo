@@ -12,7 +12,7 @@ import java.util.*;
 import static java.util.Objects.requireNonNull;
 import static org.junit.jupiter.api.Assertions.*;
 
-abstract class BookDaoTest {
+abstract class BookDaoIntegrationTest {
 
     protected static final String ISBN_NOT_PRESENT = "random";
     protected BookDao daoUnderTest;
@@ -34,8 +34,8 @@ abstract class BookDaoTest {
     protected void tearDown() {
         boolean allDeleted = insertedBooks
                 .stream()
-                .map(Book::getISBN)
-                .map(daoUnderTest::deleteBookByISBN)
+                .map(Book::getIsbn)
+                .map(daoUnderTest::deleteBookByIsbn)
                 .allMatch(Objects::nonNull);
 
         assertTrue(allDeleted);
@@ -53,7 +53,7 @@ abstract class BookDaoTest {
             String randomId = UUID.randomUUID().toString();
             Book book = BookBuilder
                     .builder()
-                    .withISBN(randomId)
+                    .withIsbn(randomId)
                     .withTitle(titlePrefix.concat(randomId))
                     .withAuthor(authorPrefix.concat(randomId))
                     .withPublisher(publisherPrefix.concat(randomId))
@@ -68,7 +68,7 @@ abstract class BookDaoTest {
     protected void testSaveBook() {
         Book book = BookBuilder
                 .builder()
-                .withISBN(ISBN_NOT_PRESENT)
+                .withIsbn(ISBN_NOT_PRESENT)
                 .withTitle("Title")
                 .withPublisher("Publisher")
                 .withAuthor("Author")
@@ -78,25 +78,25 @@ abstract class BookDaoTest {
         assertTrue(daoUnderTest.saveBook(book));
         this.insertedBooks.add(book);
 
-        Optional<Book> shouldBeSavedBook = daoUnderTest.getBookByISBN(ISBN_NOT_PRESENT);
+        Optional<Book> shouldBeSavedBook = daoUnderTest.getBookByIsbn(ISBN_NOT_PRESENT);
 
         assertTrue(shouldBeSavedBook.isPresent());
         Book savedBook = assertDoesNotThrow(() -> shouldBeSavedBook.get());
 
-        assertEquals(book.getISBN(), savedBook.getISBN());
+        assertEquals(book.getIsbn(), savedBook.getIsbn());
     }
 
     @Test
     protected void testGetBookByISBN() {
         Book book = insertedBooks.get(0);
-        Optional<Book> mightHaveBook = daoUnderTest.getBookByISBN(book.getISBN());
+        Optional<Book> mightHaveBook = daoUnderTest.getBookByIsbn(book.getIsbn());
 
         assertTrue(mightHaveBook.isPresent());
         Book savedBook = mightHaveBook.get();
 
         assertTrue(BookUtils.isBookEqual(book, savedBook));
 
-        Optional<Book> shouldNotContainBook = daoUnderTest.getBookByISBN(ISBN_NOT_PRESENT);
+        Optional<Book> shouldNotContainBook = daoUnderTest.getBookByIsbn(ISBN_NOT_PRESENT);
 
         assertFalse(shouldNotContainBook.isPresent());
     }
@@ -106,7 +106,7 @@ abstract class BookDaoTest {
         Book book = insertedBooks.get(0);
         BookBuilder bookBuilder = BookBuilder
                 .builder()
-                .withISBN(book.getISBN())
+                .withIsbn(book.getIsbn())
                 .withTitle("Updated Title")
                 .withAuthor("Updated Author")
                 .withPublisher("Updated Publisher")
@@ -116,14 +116,14 @@ abstract class BookDaoTest {
         Book previousBook = daoUnderTest.updateBook(bookToUpdate);
         assertNotNull(previousBook);
 
-        Optional<Book> shouldHaveUpdatedBook = daoUnderTest.getBookByISBN(bookToUpdate.getISBN());
+        Optional<Book> shouldHaveUpdatedBook = daoUnderTest.getBookByIsbn(bookToUpdate.getIsbn());
         assertTrue(shouldHaveUpdatedBook.isPresent());
 
         Book updatedBook = assertDoesNotThrow(shouldHaveUpdatedBook::get);
         assertTrue(BookUtils.isBookEqual(bookToUpdate, updatedBook));
 
         assertNull(daoUnderTest.updateBook(bookBuilder
-                .withISBN("invalid")
+                .withIsbn("invalid")
                 .build()));
     }
 
@@ -131,14 +131,14 @@ abstract class BookDaoTest {
     protected void testDeleteBook() {
         Book bookToDelete = insertedBooks.get(0);
 
-        Book deletedBook = daoUnderTest.deleteBookByISBN(bookToDelete.getISBN());
+        Book deletedBook = daoUnderTest.deleteBookByIsbn(bookToDelete.getIsbn());
         assertNotNull(deletedBook);
 
         assertTrue(BookUtils.isBookEqual(bookToDelete, deletedBook));
 
         insertedBooks.remove(0);
 
-        assertNull(daoUnderTest.deleteBookByISBN(ISBN_NOT_PRESENT));
+        assertNull(daoUnderTest.deleteBookByIsbn(ISBN_NOT_PRESENT));
     }
 
 }

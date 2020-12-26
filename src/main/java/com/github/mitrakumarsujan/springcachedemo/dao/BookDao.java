@@ -2,6 +2,7 @@ package com.github.mitrakumarsujan.springcachedemo.dao;
 
 import com.github.mitrakumarsujan.springcachedemo.model.Book;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface BookDao {
@@ -13,10 +14,18 @@ public interface BookDao {
     boolean saveBook(Book book);
 
     /**
-     * @param ISBN the ISBN of book to search
+     * @param isbn the isbn of book to search
      * @return Optional either containing the book or {@link Optional#empty()}
      */
-    Optional<Book> getBookByISBN(String ISBN);
+    Optional<Book> getBookByIsbn(String isbn);
+
+
+    /**
+     * Returns all saved books or empty list if no book saved
+     *
+     * @return saved books
+     */
+    List<Book> getSavedBooks();
 
     /**
      * @param book the book to update
@@ -25,8 +34,8 @@ public interface BookDao {
     Book updateBook(Book book);
 
     /**
-     * @param ISBN the isbn of book to delete
+     * @param isbn the isbn of book to delete
      * @return the book deleted, else {@code null}
      */
-    Book deleteBookByISBN(String ISBN);
+    Book deleteBookByIsbn(String isbn);
 }

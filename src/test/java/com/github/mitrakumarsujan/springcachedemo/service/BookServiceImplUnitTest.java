@@ -16,7 +16,7 @@ import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.openMocks;
 
-public class BookServiceImplTest extends BookServiceTest {
+public class BookServiceImplUnitTest extends BookServiceUnitTest {
     @Mock
     private BookDao bookDao;
 
@@ -29,7 +29,7 @@ public class BookServiceImplTest extends BookServiceTest {
         openMocks(this);
         super.serviceUnderTest = bookServiceImpl;
         insertedBook = getRandomBookBuilder()
-                .withISBN("validISBN")
+                .withIsbn("validISBN")
                 .build();
         super.setUp();
     }
@@ -40,7 +40,7 @@ public class BookServiceImplTest extends BookServiceTest {
         when(bookDao.saveBook(
                 argThat(
                         argument -> argument
-                                .getISBN()
+                                .getIsbn()
                                 .equals(super.validISBN))))
                 .thenReturn(true)
                 .thenThrow(BookAlreadyExistsException.class);
@@ -54,21 +54,21 @@ public class BookServiceImplTest extends BookServiceTest {
     protected void testAddInvalidBook() {
         doThrow(BookAlreadyExistsException.class)
                 .when(bookDao)
-                .saveBook(argThat(argument -> argument.getISBN().equals(super.invalidISBN)));
+                .saveBook(argThat(argument -> argument.getIsbn().equals(super.invalidISBN)));
         super.testAddInvalidBook();
     }
 
     @Override
     @Test
     protected void testGetValidBook() {
-        String isbn = insertedBook.getISBN();
+        String isbn = insertedBook.getIsbn();
         Book book = getRandomBookBuilder()
-                .withISBN(isbn)
+                .withIsbn(isbn)
                 .build();
 
         doReturn(Optional.of(book))
                 .when(bookDao)
-                .getBookByISBN(isbn);
+                .getBookByIsbn(isbn);
         super.testGetValidBook();
     }
 
@@ -76,7 +76,7 @@ public class BookServiceImplTest extends BookServiceTest {
     @Test
     protected void testGetInvalidBook() {
         doReturn(Optional.empty())
-                .when(bookDao).getBookByISBN(super.invalidISBN);
+                .when(bookDao).getBookByIsbn(super.invalidISBN);
         super.testGetInvalidBook();
     }
 
@@ -85,7 +85,7 @@ public class BookServiceImplTest extends BookServiceTest {
     protected void testUpdateValidBook() {
         doReturn(insertedBook)
                 .when(bookDao)
-                .updateBook(argThat(arg -> arg.getISBN().equals(insertedBook.getISBN())));
+                .updateBook(argThat(arg -> arg.getIsbn().equals(insertedBook.getIsbn())));
 
         super.testUpdateValidBook();
     }
@@ -95,7 +95,7 @@ public class BookServiceImplTest extends BookServiceTest {
     protected void testUpdateInvalidBook() {
         doThrow(BookNotFoundException.class)
                 .when(bookDao)
-                .deleteBookByISBN(eq(invalidISBN));
+                .deleteBookByIsbn(eq(invalidISBN));
         super.testUpdateInvalidBook();
     }
 
@@ -104,7 +104,7 @@ public class BookServiceImplTest extends BookServiceTest {
     protected void testDeleteValidBook() {
         doReturn(insertedBook)
                 .when(bookDao)
-                .deleteBookByISBN(eq(insertedBook.getISBN()));
+                .deleteBookByIsbn(eq(insertedBook.getIsbn()));
         super.testDeleteValidBook();
     }
 
@@ -113,7 +113,7 @@ public class BookServiceImplTest extends BookServiceTest {
     protected void testDeleteInvalidBook() {
         doReturn(null)
                 .when(bookDao)
-                .deleteBookByISBN(eq(invalidISBN));
+                .deleteBookByIsbn(eq(invalidISBN));
         super.testDeleteInvalidBook();
     }
 }

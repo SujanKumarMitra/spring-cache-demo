@@ -21,8 +21,8 @@ public class BookBuilder {
         return this.book;
     }
 
-    public BookBuilder withISBN(String ISBN) {
-        book.setISBN(ISBN);
+    public BookBuilder withIsbn(String isbn) {
+        book.setISBN(isbn);
         return this;
     }
 

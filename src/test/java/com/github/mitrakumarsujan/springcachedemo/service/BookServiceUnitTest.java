@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 import static com.github.mitrakumarsujan.springcachedemo.BookUtils.isBookEqual;
 import static org.junit.jupiter.api.Assertions.*;
 
-abstract class BookServiceTest {
+abstract class BookServiceUnitTest {
 
     protected BookService serviceUnderTest;
 
@@ -37,12 +37,12 @@ abstract class BookServiceTest {
     @Test
     protected void testAddValidBook() {
         Book book = getRandomBookBuilder()
-                .withISBN(validISBN)
+                .withIsbn(validISBN)
                 .build();
 
         Book savedBook = serviceUnderTest.addBook(book);
         assertNotNull(savedBook);
-        assertEquals(book.getISBN(), savedBook.getISBN());
+        assertEquals(book.getIsbn(), savedBook.getIsbn());
 
         assertThrows(BookAlreadyExistsException.class, () ->
                 serviceUnderTest.addBook(savedBook));
@@ -51,17 +51,17 @@ abstract class BookServiceTest {
     @Test
     protected void testAddInvalidBook() {
         Book invalidBook = getRandomBookBuilder()
-                .withISBN(invalidISBN)
+                .withIsbn(invalidISBN)
                 .build();
         assertThrows(BookAlreadyExistsException.class, () -> serviceUnderTest.addBook(invalidBook));
     }
 
     @Test
     protected void testGetValidBook() {
-        String isbn = insertedBook.getISBN();
+        String isbn = insertedBook.getIsbn();
         Book book = serviceUnderTest.getBook(isbn);
         assertNotNull(book);
-        assertEquals(isbn, book.getISBN());
+        assertEquals(isbn, book.getIsbn());
     }
 
     @Test
@@ -72,7 +72,7 @@ abstract class BookServiceTest {
     @Test
     protected void testUpdateValidBook() {
         Book bookToUpdate = getRandomBookBuilder()
-                .withISBN(insertedBook.getISBN())
+                .withIsbn(insertedBook.getIsbn())
                 .withTitle("Updated Title")
                 .withAuthor("Updated Author")
                 .withCategory("Updated Category")
@@ -85,7 +85,7 @@ abstract class BookServiceTest {
     @Test
     protected void testUpdateInvalidBook() {
         Book bookToUpdate = getRandomBookBuilder()
-                .withISBN(invalidISBN)
+                .withIsbn(invalidISBN)
                 .build();
         assertThrows(BookNotFoundException.class, () ->
                 serviceUnderTest.updateBook(bookToUpdate));
@@ -93,9 +93,9 @@ abstract class BookServiceTest {
 
     @Test
     protected void testDeleteValidBook() {
-        String isbn = insertedBook.getISBN();
+        String isbn = insertedBook.getIsbn();
         Book deletedBook = assertDoesNotThrow(() -> serviceUnderTest.deleteBook(isbn));
-        assertEquals(isbn, deletedBook.getISBN());
+        assertEquals(isbn, deletedBook.getIsbn());
 
         assertTrue(isBookEqual(insertedBook,deletedBook));
     }
@@ -111,7 +111,7 @@ abstract class BookServiceTest {
      */
     protected BookBuilder getRandomBookBuilder() {
         return BookBuilder.builder()
-                .withISBN("ISBN")
+                .withIsbn("ISBN")
                 .withAuthor("Author")
                 .withTitle("Title")
                 .withPublisher("Publisher")

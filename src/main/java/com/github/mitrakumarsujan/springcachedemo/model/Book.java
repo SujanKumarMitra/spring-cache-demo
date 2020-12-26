@@ -4,7 +4,7 @@ import java.util.List;
 
 public interface Book {
 
-    String getISBN();
+    String getIsbn();
 
     String getTitle();
 
