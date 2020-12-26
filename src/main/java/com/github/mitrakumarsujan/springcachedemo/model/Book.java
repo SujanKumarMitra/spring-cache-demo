@@ -1,8 +1,9 @@
 package com.github.mitrakumarsujan.springcachedemo.model;
 
+import java.io.Serializable;
 import java.util.List;
 
-public interface Book {
+public interface Book extends Serializable {
 
     String getIsbn();
 
