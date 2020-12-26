@@ -3,12 +3,9 @@ package com.github.mitrakumarsujan.springcachedemo.dao;
 import com.github.mitrakumarsujan.springcachedemo.model.Book;
 import org.springframework.stereotype.Service;
 
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
-import static java.util.stream.Collectors.toList;
+import static java.util.Collections.synchronizedMap;
 
 @Service
 public class InMemoryBookDao implements BookDao {
@@ -16,7 +13,7 @@ public class InMemoryBookDao implements BookDao {
     Map<String, Book> bookMap;
 
     public InMemoryBookDao() {
-        this(new LinkedHashMap<>());
+        this(synchronizedMap(new LinkedHashMap<>()));
     }
 
     public InMemoryBookDao(Map<String, Book> bookMap) {
@@ -37,11 +34,7 @@ public class InMemoryBookDao implements BookDao {
 
     @Override
     public List<Book> getSavedBooks() {
-        return bookMap
-                .entrySet()
-                .stream()
-                .map(Map.Entry::getValue)
-                .collect(toList());
+        return new ArrayList<>(bookMap.values());
     }
 
     @Override
