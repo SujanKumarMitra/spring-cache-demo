@@ -17,7 +17,7 @@ import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
-public class BookServiceImplUnitTest extends BookServiceUnitTest {
+class BookServiceImplUnitTest extends BookServiceUnitTest {
     @MockBean
     private BookDao bookDao;
 
