@@ -5,6 +5,7 @@ import com.github.mitrakumarsujan.springcachedemo.dto.*;
 import com.github.mitrakumarsujan.springcachedemo.model.Book;
 import com.github.mitrakumarsujan.springcachedemo.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,8 +17,12 @@ import java.util.List;
 @RequestMapping("/books")
 public class BookController {
 
-    @Autowired
     private BookService bookService;
+
+    @Autowired
+    public BookController(@Qualifier("cacheEnabledBookService") BookService bookService) {
+        this.bookService = bookService;
+    }
 
     @GetMapping
     public ResponseEntity<GetBooksResponseDto> getBooks() {
