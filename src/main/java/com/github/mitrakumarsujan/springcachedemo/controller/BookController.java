@@ -2,6 +2,8 @@ package com.github.mitrakumarsujan.springcachedemo.controller;
 
 
 import com.github.mitrakumarsujan.springcachedemo.dto.*;
+import com.github.mitrakumarsujan.springcachedemo.exception.BookAlreadyExistsException;
+import com.github.mitrakumarsujan.springcachedemo.exception.BookNotFoundException;
 import com.github.mitrakumarsujan.springcachedemo.model.Book;
 import com.github.mitrakumarsujan.springcachedemo.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,9 +48,11 @@ public class BookController {
                 .body(new CreateBookResponseDto("Book created successfully.", createdBook));
     }
 
-    @PutMapping
+    @PutMapping("/{isbn}")
     public ResponseEntity<UpdateBookResponseDto> updateBook(
+            @PathVariable("isbn") String isbn,
             @RequestBody @Valid UpdateBookRequestDto book) {
+        book.setIsbn(isbn);
         Book previous = bookService.updateBook(book);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -59,5 +63,23 @@ public class BookController {
     public ResponseEntity<DeleteBookResponseDto> deleteBook(@PathVariable("isbn") String isbn) {
         Book deletedBook = bookService.deleteBook(isbn);
         return ResponseEntity.ok(new DeleteBookResponseDto("Book deleted successfully", deletedBook));
+    }
+
+    @ExceptionHandler(BookNotFoundException.class)
+    public ResponseEntity<BookCrudErrorResponseDto> handleBookNotFoundException(BookNotFoundException exception) {
+        BookCrudErrorResponseDto response = new BookCrudErrorResponseDto();
+        response.setMessage(exception.getMessage());
+        response.setReason("Check isbn of the book");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(response);
+    }
+
+    @ExceptionHandler(BookAlreadyExistsException.class)
+    public ResponseEntity<BookCrudErrorResponseDto> handleBookNotFoundException(BookAlreadyExistsException exception) {
+        BookCrudErrorResponseDto response = new BookCrudErrorResponseDto();
+        response.setMessage(exception.getMessage());
+        response.setReason("Try with a different isbn");
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(response);
     }
 }

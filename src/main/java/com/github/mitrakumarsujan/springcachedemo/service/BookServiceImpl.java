@@ -34,6 +34,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Book addBook(Book book) throws BookAlreadyExistsException {
+        LOGGER.info("adding a book with isbn [{}]", book.getIsbn());
         boolean result = bookDao.saveBook(book);
         if (!result)
             throw new BookAlreadyExistsException(
@@ -74,8 +75,8 @@ public class BookServiceImpl implements BookService {
         return deletedBook;
     }
 
-    private BookNotFoundException getBookNotFoundException(String ISBN) {
+    private BookNotFoundException getBookNotFoundException(String isbn) {
         return new BookNotFoundException(
-                format("no book found with isbn [{0}]", ISBN));
+                format("no book found with isbn [{0}]", isbn));
     }
 }

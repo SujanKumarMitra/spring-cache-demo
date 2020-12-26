@@ -17,6 +17,7 @@ import java.util.List;
 public class CacheEnabledBookService implements BookService {
 
     private BookService proxyBookService;
+    private static final String CACHE_NAME = "books";
 
     @Autowired
     public CacheEnabledBookService(@Qualifier("bookServiceImpl") BookService proxyBookService) {
@@ -28,13 +29,13 @@ public class CacheEnabledBookService implements BookService {
     }
 
     @Override
-    @CachePut(cacheNames = "books", key = "#book.isbn")
+    @CachePut(cacheNames = CACHE_NAME, key = "#book.isbn")
     public Book addBook(Book book) throws BookAlreadyExistsException {
         return proxyBookService.addBook(book);
     }
 
     @Override
-    @Cacheable(cacheNames = "books", key = "#isbn")
+    @Cacheable(cacheNames = CACHE_NAME, key = "#isbn")
     public Book getBook(String isbn) throws BookNotFoundException {
         return proxyBookService.getBook(isbn);
     }
@@ -45,13 +46,13 @@ public class CacheEnabledBookService implements BookService {
     }
 
     @Override
-    @CachePut(cacheNames = "books", key="#book.isbn")
+    @CacheEvict(cacheNames = CACHE_NAME, key="#book.isbn")
     public Book updateBook(Book book) throws BookNotFoundException {
         return proxyBookService.updateBook(book);
     }
 
     @Override
-    @CacheEvict(cacheNames = "books", key = "#isbn")
+    @CacheEvict(cacheNames = CACHE_NAME, key = "#isbn")
     public Book deleteBook(String isbn) throws BookNotFoundException {
         return proxyBookService.deleteBook(isbn);
     }
