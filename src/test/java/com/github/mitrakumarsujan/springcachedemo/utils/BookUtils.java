@@ -1,4 +1,4 @@
-package com.github.mitrakumarsujan.springcachedemo;
+package com.github.mitrakumarsujan.springcachedemo.utils;
 
 import com.github.mitrakumarsujan.springcachedemo.model.Book;
 

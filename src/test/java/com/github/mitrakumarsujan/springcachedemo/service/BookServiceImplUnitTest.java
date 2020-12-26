@@ -7,26 +7,26 @@ import com.github.mitrakumarsujan.springcachedemo.model.Book;
 import com.github.mitrakumarsujan.springcachedemo.model.BookImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.*;
-import static org.mockito.MockitoAnnotations.openMocks;
 
+@SpringBootTest
 public class BookServiceImplUnitTest extends BookServiceUnitTest {
-    @Mock
+    @MockBean
     private BookDao bookDao;
 
-    @InjectMocks
+    @Autowired
     private BookServiceImpl bookServiceImpl;
 
     @Override
     @BeforeEach
     void setUp() {
-        openMocks(this);
         super.serviceUnderTest = bookServiceImpl;
         insertedBook = getRandomBookBuilder()
                 .withIsbn("validISBN")
